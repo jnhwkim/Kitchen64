@@ -1,4 +1,6 @@
 var Kitchen = new function() {
+	this.pos = [0,0];  // A1
+	this.dir = 4;  // south
 	this.getCol = function(ch) {
 		var row = -1;
 		if (ch >= 'A' || ch <= 'Z') {
@@ -23,6 +25,9 @@ var Kitchen = new function() {
 		var pos = [row, col];
 		return pos;
 	};
+	this.getPosCh = function(pos) {
+		return this.getCol_(pos[1]) + '' + (pos[0] + 1);
+	}
 	this.canIgo = function(pos, dir) {
 		// dir: from 0, north, north-east, east, and so on.
 		var pos_ = [pos[0]+this.DIRVEC[dir][0], pos[1]+this.DIRVEC[dir][1]];
@@ -34,18 +39,64 @@ var Kitchen = new function() {
 		}
 		return pos_;
 	};
-	this.MAP = [[1,0,0,0,0,0,0,0,0],
-							[1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1],
-							[1,1,0,0,0,0,1,1,1],
-							[1,1,0,0,0,0,1,1,1],
-							[1,1,0,0,0,0,1,1,1],
-							[1,1,0,0,0,0,1,1,1],
-							[1,1,0,0,0,0,1,1,1],
-							[1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1],
-							[0,0,1,1,1,1,1,1,1],
-							[0,0,1,0,0,1,1,1,1]];
+	this.redisplay = function() {
+		$('.position').html(this.getPosCh(this.pos) + ' / ' + this.dir);
+		this.minimap();
+		var posCh = this.getPosCh(this.pos);
+		$('.screen img').attr('src', 'https://github.com/jnhwkim/Kitchen64/raw/master/kitchen64.half/' + posCh + '_' + this.dir + '.JPG');
+		return 1;
+	};
+	this.action = function(act) {
+		switch (act) {
+			case 'forward':
+				this._move(this.dir);
+				break;
+			case 'backward':
+				this._move((this.dir + 4) % 8);
+				break;
+			case 'left':
+				this.dir = ((this.dir - 1) + 8) % 8;
+				break;
+			case 'right':
+				this.dir = (this.dir + 1) % 8;
+				break;
+		}
+		this.redisplay();
+	};
+	this._move = function(dir) {
+		pos_ = this.canIgo(this.pos, dir);
+		if (2 == pos_.length) { // naive check for a pair
+			this.pos = pos_;
+		} else {
+			return -1;
+		}
+	};
+	this.minimap = function() {
+		var code = '';
+		for (var i = 0; i < this.MAP.length; i++) {
+			for (var j = 0; j < this.MAP[0].length; j++) {
+				tag = (1 == this.MAP[i][j]) ? 'open' : 'block';
+				if (i == this.pos[0] && j == this.pos[1]) {
+					tag = 'current';
+				}
+				code += '<div class="state ' + tag + '">' + this.getPosCh([i,j]) 
+							+ '</div>';
+			}
+		}
+		$('.minimap').html(code);
+	};
+	this.MAP = [[1,0,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1],
+							[1,1,0,0,0,0,1,1],
+							[1,1,0,0,0,0,1,1],
+							[1,1,0,0,0,0,1,1],
+							[1,1,0,0,0,0,1,1],
+							[1,1,0,0,0,0,1,1],
+							[1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1],
+							[0,0,1,1,1,1,1,1],
+							[0,0,1,0,0,1,1,1]];
 	this.DIRVEC = [[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1]];
 };

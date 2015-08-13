@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/kitchen.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <script type="text/javascript" src="javascripts/kitchen.js"></script>
   </head>
@@ -39,15 +40,17 @@
 <p>
 
 <div class="screen">
-  <img src="https://github.com/jnhwkim/Kitchen64/raw/master/kitchen64.half/A10_0.JPG" alt="" style="max-width:100%;" adlesse_been_here="true">
+  <img src="https://github.com/jnhwkim/Kitchen64/raw/master/kitchen64.half/A1_4.JPG" alt="" style="max-width:100%;" adlesse_been_here="true">
+  <div class="minimap"></div>
 </div>
-<div class="minimap"></div>
 <div class="position">{position}</div>
 <div class="message">{message}</div>
-<button class="btn btn-default left">left</button>
-<button class="btn btn-default forward">forward</button>
-<button class="btn btn-default right">right</button>
-<button class="btn btn-default backward">backward</button>
+<button class="btn btn-default left" onclick="Kitchen.action('left')">left</button>
+<button class="btn btn-default forward" onclick="Kitchen.action('forward')">forward</button>
+<button class="btn btn-default right" onclick="Kitchen.action('right')">right</button>
+<button class="btn btn-default backward" onclick="Kitchen.action('backward')">backward</button>
+
+<script>Kitchen.minimap()</script>
 
 </p>
 
