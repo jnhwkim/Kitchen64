@@ -1,5 +1,5 @@
 .screen {
-	text-align: center;
+	text-align: justify;
 }
 .screen img {
 	border: 3px solid #eee;
@@ -27,3 +27,19 @@
 	color: white;
 	font-weight: bold;
 }
+.dir-indicator {
+	float: left;
+	background-color: yellow;
+	position: relative;
+	width: 4px;
+	height: 4px;
+	top: 10px;
+}
+.dir-indicator.dir0 { top: 0px; left: 12px; }
+.dir-indicator.dir1 { top: 0px; left: 24px; }
+.dir-indicator.dir2 { top: 12px; left: 24px; }
+.dir-indicator.dir3 { top: 24px; left: 24px; }
+.dir-indicator.dir4 { top: 24px; 	left: 12px; }
+.dir-indicator.dir5 { top: 24px; left: 0px; }
+.dir-indicator.dir6 { top: 12px; left: 0px; }
+.dir-indicator.dir7 { top: 0px; left: 0px; }

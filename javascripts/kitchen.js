@@ -33,6 +33,8 @@ var Kitchen = new function() {
 		var pos_ = [pos[0]+this.DIRVEC[dir][0], pos[1]+this.DIRVEC[dir][1]];
 		if (pos_[0] < 0 || pos_[1] < 0) {  // out of index!
 			return -1;
+		} else if (pos_[0] >= this.MAP.length || pos_[1] >= this.MAP[0].length) {
+			return -1;
 		}
 		if (0 == this.MAP[pos_[0]][pos_[1]]) {  // blocked!
 			return -1;
@@ -49,20 +51,29 @@ var Kitchen = new function() {
 	this.action = function(act) {
 		switch (act) {
 			case 'forward':
-				this._move(this.dir);
+				if (0 > this._move(this.dir)) {
+					this.msg('Blocked!');
+				}
 				break;
 			case 'backward':
-				this._move((this.dir + 4) % 8);
+				if (0 > this._move((this.dir + 4) % 8)) {
+					this.msg('Blocked!');
+				}
 				break;
 			case 'left':
 				this.dir = ((this.dir - 1) + 8) % 8;
+				this.msg('');
 				break;
 			case 'right':
 				this.dir = (this.dir + 1) % 8;
+				this.msg('');
 				break;
 		}
 		this.redisplay();
 	};
+	this.msg = function(str) {
+		$('.message').html(str);
+	}
 	this._move = function(dir) {
 		pos_ = this.canIgo(this.pos, dir);
 		if (2 == pos_.length) { // naive check for a pair
@@ -78,15 +89,18 @@ var Kitchen = new function() {
 				tag = (1 == this.MAP[i][j]) ? 'open' : 'block';
 				if (i == this.pos[0] && j == this.pos[1]) {
 					tag = 'current';
+					dir = '<div class="dir-indicator dir' + this.dir + '"></div>';
+				} else {
+					dir = '';
 				}
-				code += '<div class="state ' + tag + '">' + this.getPosCh([i,j]) 
+				code += '<div class="state ' + tag + '">' + dir + this.getPosCh([i,j]) 
 							+ '</div>';
 			}
 		}
 		$('.minimap').html(code);
 	};
 	this.MAP = [[1,0,0,0,0,0,0,0],
-							[1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,0],
 							[1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1],
 							[1,1,0,0,0,0,1,1],
